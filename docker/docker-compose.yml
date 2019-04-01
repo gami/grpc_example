@@ -1,0 +1,15 @@
+version: "3"
+services:
+  api:
+    build: ../api
+    tty: true
+    volumes:
+      - "../api:/www/app"
+    ports:
+      - "50051:50051"
+    environment:
+      - VIRTUAL_HOST=api.dev
+      - GOCACHE=/www/app/tmp/go/cache
+      - GOPATH=/www/app/vendor
+      - GOBIN=/www/app/vendor/bin
+    command: make dev

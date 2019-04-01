@@ -1,0 +1,61 @@
+//copied from ../api/proto/pancake.proto
+syntax = "proto3";
+package pancake.baker;
+
+option go_package = "gen/grpc";
+
+import "google/protobuf/timestamp.proto";
+
+service PancakeBakerService {
+	// Bakeは指定されたメニューのパンケーキを焼く関数です
+	rpc Bake(BakeRequest) returns (BakeResponse) {}
+	// Reportはメニューごとに焼いたパンケーキの数を返します
+	rpc Report(ReportRequest) returns (ReportResponse) {}
+}
+
+//Pancakeは一枚一枚の焼かれたパンケーキを表します。
+message Pancake {
+	//メニュー表
+	enum Menu{
+		UNKNOWN = 0;
+		CLASSIC= 1;
+		BANANA＿AND_WHIP = 2;
+		BACON_AND_CHEESE = 3;
+		MIX_BERRY = 4;
+		BAKED_MARSHMALLOW = 5;
+	}
+	
+	//ID
+	int32 id = 1;
+	//シェフの名前
+	string chef_name = 2;
+	//メニュー
+	Menu menu = 3;
+	//焼き具合を表すスコアです(0-0.9)
+	float32 technical_score = 5;
+	//焼いた日時
+    google.protobuf.Timestamp create_time = 15;
+}
+
+//Reportはどのくらいパンケーキを焼いたかについての報告書を表します
+message Report{
+	message BakeCount{
+		Menu menu = 1;
+		int32 count = 2;
+	}
+	repeated BakeCount bake_counts = 1;
+}
+
+message BakeRequest {
+	Pancake.Menu menu = 1;
+}
+
+message BakeResponse {
+	Pancake pancake = 1;
+}
+
+message ReportRequest {}
+
+message ReportResponse {
+	Report report = 1;
+}
