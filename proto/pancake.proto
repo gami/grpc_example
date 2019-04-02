@@ -1,7 +1,7 @@
 syntax = "proto3";
 package pancake.baker;
 
-option go_package = "gen/grpc";
+option go_package = "gen/api";
 
 import "google/protobuf/timestamp.proto";
 
@@ -18,20 +18,19 @@ message Pancake {
 	enum Menu{
 		UNKNOWN = 0;
 		CLASSIC= 1;
-		BANANA＿AND_WHIP = 2;
+		BANANA_AND_WHIP = 2;
 		BACON_AND_CHEESE = 3;
 		MIX_BERRY = 4;
 		BAKED_MARSHMALLOW = 5;
+		SPICY_CURRY = 6;
 	}
 	
-	//ID
-	int32 id = 1;
 	//シェフの名前
-	string chef_name = 2;
+	string chef_name = 1;
 	//メニュー
-	Menu menu = 3;
+	Menu menu = 2;
 	//焼き具合を表すスコアです(0-0.9)
-	float32 technical_score = 5;
+	float technical_score = 3;
 	//焼いた日時
     google.protobuf.Timestamp create_time = 15;
 }
@@ -39,7 +38,7 @@ message Pancake {
 //Reportはどのくらいパンケーキを焼いたかについての報告書を表します
 message Report{
 	message BakeCount{
-		Menu menu = 1;
+		Pancake.Menu menu = 1;
 		int32 count = 2;
 	}
 	repeated BakeCount bake_counts = 1;

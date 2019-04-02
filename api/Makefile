@@ -6,7 +6,7 @@ setup:
 protoc:
 	protoc \
 		-Iproto \
-		--go_out=plugins=grpc:. \
+		--go_out=plugins=grpc:api \
 		proto/*.proto
 
 .PHONY: run
