@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 	"context"
+	"fmt"
 
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"google.golang.org/grpc/codes"
@@ -19,21 +20,28 @@ func init() {
 
 //BakerHandler はパンケーキを焼きます
 type BakerHandler struct {
-	report counter
+	report *report
 }
 
-type counter struct {
+type report struct {
 	sync.Mutex // 複数人が同時に焼いても大丈夫にしておきます
 	data       map[api.Pancake_Menu]int
 }
 
 //NewBakerHandler はBakerHandlerを初期化します
 func NewBakerHandler() *BakerHandler {
-	return &BakerHandler{}
+	return &BakerHandler{
+		report: &report{
+			data: make(map[api.Pancake_Menu]int),
+		},
+	}
 }
 
 //Bake は指定されたメニューのパンを焼いて、焼けたパンをResponseとして返します。
-func (h *BakerHandler) Bake(ctx context.Context, req *api.BakeRequest) (*api.BakeResponse, error) {
+func (h *BakerHandler) Bake(
+	ctx context.Context,
+	req *api.BakeRequest,
+	) (*api.BakeResponse, error) {
 	//バリデーション
 	if req.Menu == api.Pancake_UNKNOWN || req.Menu > api.Pancake_SPICY_CURRY{
 		return nil, status.Errorf(codes.InvalidArgument, "パンケーキを選んでください！")
