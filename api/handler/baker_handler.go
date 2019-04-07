@@ -5,7 +5,6 @@ import (
 	"sync"
 	"time"
 	"context"
-	"fmt"
 
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"google.golang.org/grpc/codes"
@@ -70,7 +69,7 @@ func (h *BakerHandler) Bake(
 //Report は、焼けたパンの数を報告します。
 func (h *BakerHandler) Report(ctx context.Context, req *api.ReportRequest) (*api.ReportResponse, error) {
 	//sliceを初期化
-	counts := make([]*api.Report_BakeCount, len(h.report.data))
+	counts := make([]*api.Report_BakeCount, 0)
 
 	//レポートを作ります
 	h.report.Lock()
