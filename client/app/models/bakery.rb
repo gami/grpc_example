@@ -50,6 +50,10 @@ class Bakery
 		end
 	end
 
+	def self.metadata
+		{ authorization: 'bearer hi/mi/tsu' }
+	end
+
 	# パンケーキを焼きます
 	def self.bake_pancake(menu)
 		req = Pancake::Baker::BakeRequest.new({
@@ -57,7 +61,7 @@ class Bakery
 		})
 
 		# menuが不正な場合、GRPC::InvalidArgumentがスローされる
-		res = stub.bake(req)
+		res = stub.bake(req, metadata: metadata)
 
 		{
 			chef_name: res.pancake.chef_name,
@@ -69,7 +73,7 @@ class Bakery
 
 	# レポートを書きます
 	def self.report
-		res = stub.report(Pancake::Baker::ReportRequest.new())
+		res = stub.report(Pancake::Baker::ReportRequest.new(),  metadata: metadata)
 	
 		res.report.bake_counts.map {|r| [r.menu, r.count]}.to_h
 	end

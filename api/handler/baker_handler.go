@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 	"context"
+	"fmt"
 
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"google.golang.org/grpc/codes"
@@ -51,6 +52,8 @@ func (h *BakerHandler) Bake(
 	h.report.Lock()
 	h.report.data[req.Menu] = h.report.data[req.Menu] + 1
 	h.report.Unlock()
+
+	fmt.Printf("Baked a pancake for %v !\n", ctx.Value("UserName"))
 
 	//レスポンスを作って返します
 	return &api.BakeResponse{
