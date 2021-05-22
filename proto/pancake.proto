@@ -1,5 +1,5 @@
 syntax = "proto3";
-package pancake.baker;
+package pancake.maker;
 
 option go_package = "gen/api";
 
@@ -10,6 +10,8 @@ service PancakeBakerService {
 	rpc Bake(BakeRequest) returns (BakeResponse) {}
 	// Reportはメニューごとに焼いたパンケーキの数を返します
 	rpc Report(ReportRequest) returns (ReportResponse) {}
+	// NotifyBakedはパンケーキが焼かれたら常に通知します。自分の焼いたパンケーキ以外でも通知されます。
+	rpc NotifyBaked(NotifiyBakedRequest) returns (stream NotifyBakedResponse) {}
 }
 
 //Pancakeは一枚一枚の焼かれたパンケーキを表します。
@@ -56,4 +58,10 @@ message ReportRequest {}
 
 message ReportResponse {
 	Report report = 1;
+}
+
+message NotifiyBakedRequest {}
+
+message NotifyBakedResponse {
+	Pancake pancake = 1;
 }

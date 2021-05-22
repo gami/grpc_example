@@ -1,11 +1,11 @@
 package handler
 
 import (
+	"context"
+	"fmt"
 	"math/rand"
 	"sync"
 	"time"
-	"context"
-	"fmt"
 
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"google.golang.org/grpc/codes"
@@ -41,9 +41,9 @@ func NewBakerHandler() *BakerHandler {
 func (h *BakerHandler) Bake(
 	ctx context.Context,
 	req *api.BakeRequest,
-	) (*api.BakeResponse, error) {
+) (*api.BakeResponse, error) {
 	//バリデーション
-	if req.Menu == api.Pancake_UNKNOWN || req.Menu > api.Pancake_SPICY_CURRY{
+	if req.Menu == api.Pancake_UNKNOWN || req.Menu > api.Pancake_SPICY_CURRY {
 		return nil, status.Errorf(codes.InvalidArgument, "パンケーキを選んでください！")
 	}
 
